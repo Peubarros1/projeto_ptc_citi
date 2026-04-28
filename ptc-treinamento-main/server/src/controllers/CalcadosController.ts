@@ -33,7 +33,7 @@ export const criarCalcado = async (req: Request, res: Response) => {
       quantidade_em_estoque === undefined
     ) {
       return res.status(400).json({
-        message: "Preencha todos os campos obrigatorios do calcado.",
+        message: "Preenche todos os campos obrigatórios do calçado, por favor.",
       });
     }
 
@@ -50,7 +50,7 @@ export const criarCalcado = async (req: Request, res: Response) => {
     return res.status(201).json(newCalcado);
   } catch (error) {
     return res.status(400).json({
-      message: "Erro ao criar calcado.",
+      message: "Não foi possível criar o calçado.",
       error,
     });
   }
@@ -65,14 +65,14 @@ export const listarCalcados = async (_req: Request, res: Response) => {
     // Mantido para preservar a logica atual do projeto.
     if (!calcados) {
       return res.status(404).json({
-        message: "Nenhum calcado cadastrado ainda.",
+        message: "Ainda não tem calçado cadastrado.",
       });
     }
 
     return res.status(200).json(calcados);
   } catch (error) {
     return res.status(400).json({
-      message: "Erro ao buscar calcados.",
+      message: "Não foi possível buscar os calçados.",
       error,
     });
   }
@@ -87,7 +87,7 @@ export const atualizarCalcado = async (req: Request, res: Response) => {
 
     // Se o id nao for numero valido, encerra com erro 400.
     if (Number.isNaN(id)) {
-      return res.status(400).json({ message: "ID invalido." });
+      return res.status(400).json({ message: "ID inválido." });
     }
 
     const payload = req.body as {
@@ -105,7 +105,7 @@ export const atualizarCalcado = async (req: Request, res: Response) => {
     return res.status(200).json(updatedCalcado);
   } catch (error) {
     return res.status(400).json({
-      message: "Erro ao atualizar calcado.",
+      message: "Não foi possível atualizar o calçado.",
       error,
     });
   }
@@ -119,15 +119,15 @@ export const removerCalcado = async (req: Request, res: Response) => {
 
     // Garante id valido antes de tentar excluir no banco.
     if (Number.isNaN(id)) {
-      return res.status(400).json({ message: "ID invalido." });
+      return res.status(400).json({ message: "ID inválido." });
     }
 
     await removerCalcadoRepo(id);
 
-    return res.status(200).json({ message: "Calcado removido com sucesso." });
+    return res.status(200).json({ message: "Calçado removido com sucesso." });
   } catch (error) {
     return res.status(400).json({
-      message: "Erro ao remover calcado.",
+      message: "Não deu pra remover o calçado.",
       error,
     });
   }
@@ -141,14 +141,14 @@ export const buscarCalcadosPorTamanho = async (req: Request, res: Response) => {
 
     // Evita consulta com parametro invalido.
     if (Number.isNaN(tamanho)) {
-      return res.status(400).json({ message: "Tamanho invalido." });
+      return res.status(400).json({ message: "Tamanho inválido." });
     }
 
     const calcados = await buscarCalcadosPorTamanhoRepo(tamanho);
     return res.status(200).json(calcados);
   } catch (error) {
     return res.status(400).json({
-      message: "Erro ao buscar calcados por tamanho.",
+      message: "Não foi possível buscar os calçados por tamanho.",
       error,
     });
   }
@@ -162,14 +162,14 @@ export const buscarCalcadosPorMarca = async (req: Request, res: Response) => {
 
     // Sem marca nao existe filtro valido.
     if (!marca) {
-      return res.status(400).json({ message: "Marca invalida." });
+      return res.status(400).json({ message: "Marca inválida." });
     }
 
     const calcados = await buscarCalcadosPorMarcaRepo(marca);
     return res.status(200).json(calcados);
   } catch (error) {
     return res.status(400).json({
-      message: "Erro ao buscar calcados por marca.",
+      message: "Não foi possível buscar calçados por marca.",
       error,
     });
   }
@@ -183,7 +183,7 @@ export const contarTotalPares = async (_req: Request, res: Response) => {
     return res.status(200).json({ total_de_pares: total });
   } catch (error) {
     return res.status(400).json({
-      message: "Erro ao contar total de pares no estoque.",
+      message: "Não foi possível contar o total de pares no estoque.",
       error,
     });
   }
