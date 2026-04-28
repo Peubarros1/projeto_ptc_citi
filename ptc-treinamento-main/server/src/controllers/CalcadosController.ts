@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import {
-  countTotalParesRepo,
-  createCalcadoRepo,
-  deleteCalcadoRepo,
-  findCalcadosByMarcaRepo,
-  findCalcadosByTamanhoRepo,
-  readAllCalcadosRepo,
-  updateCalcadoRepo,
+  contarTotalParesRepo,
+  criarCalcadoRepo,
+  removerCalcadoRepo,
+  buscarCalcadosPorMarcaRepo,
+  buscarCalcadosPorTamanhoRepo,
+  listarCalcadosRepo,
+  atualizarCalcadoRepo,
 } from "../repositorie/CalcadosRepositorie";
 
 // Toda rota com :id recebe texto em req.params.
@@ -19,7 +19,7 @@ const parseId = (value: string) => Number.parseInt(value, 10);
 // 2) Valida obrigatorios.
 // 3) Converte os numericos para Number antes de salvar.
 // 4) Retorna 201 com o registro criado.
-export const createCalcado = async (req: Request, res: Response) => {
+export const criarCalcado = async (req: Request, res: Response) => {
   try {
     const { nome_produto, cor, marca, tamanho, preco, quantidade_em_estoque } = req.body;
 
@@ -38,7 +38,7 @@ export const createCalcado = async (req: Request, res: Response) => {
     }
 
     // Conversao explicita dos campos numericos evita salvar string por engano.
-    const newCalcado = await createCalcadoRepo({
+    const newCalcado = await criarCalcadoRepo({
       nome_produto,
       cor,
       marca,
@@ -58,9 +58,9 @@ export const createCalcado = async (req: Request, res: Response) => {
 
 // READ (LISTA)
 // Retorna todos os calcados cadastrados no sistema.
-export const readAllCalcados = async (_req: Request, res: Response) => {
+export const listarCalcados = async (_req: Request, res: Response) => {
   try {
-    const calcados = await readAllCalcadosRepo();
+    const calcados = await listarCalcadosRepo();
 
     // Mantido para preservar a logica atual do projeto.
     if (!calcados) {
@@ -81,7 +81,7 @@ export const readAllCalcados = async (_req: Request, res: Response) => {
 // UPDATE
 // Atualiza um calcado existente pelo id.
 // O body pode conter apenas os campos que devem ser alterados.
-export const updateCalcado = async (req: Request, res: Response) => {
+export const atualizarCalcado = async (req: Request, res: Response) => {
   try {
     const id = parseId(req.params.id);
 
@@ -100,7 +100,7 @@ export const updateCalcado = async (req: Request, res: Response) => {
     };
 
     // A regra de atualizacao parcial fica no repositorio via payload parcial.
-    const updatedCalcado = await updateCalcadoRepo(id, payload);
+    const updatedCalcado = await atualizarCalcadoRepo(id, payload);
 
     return res.status(200).json(updatedCalcado);
   } catch (error) {
@@ -113,7 +113,7 @@ export const updateCalcado = async (req: Request, res: Response) => {
 
 // DELETE
 // Remove um calcado do estoque pelo id informado na rota.
-export const deleteCalcado = async (req: Request, res: Response) => {
+export const removerCalcado = async (req: Request, res: Response) => {
   try {
     const id = parseId(req.params.id);
 
@@ -122,7 +122,7 @@ export const deleteCalcado = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "ID invalido." });
     }
 
-    await deleteCalcadoRepo(id);
+    await removerCalcadoRepo(id);
 
     return res.status(200).json({ message: "Calcado removido com sucesso." });
   } catch (error) {
@@ -135,7 +135,7 @@ export const deleteCalcado = async (req: Request, res: Response) => {
 
 // EXTRA: BUSCA POR TAMANHO
 // Lista todos os calcados com o tamanho recebido via params.
-export const findCalcadosByTamanho = async (req: Request, res: Response) => {
+export const buscarCalcadosPorTamanho = async (req: Request, res: Response) => {
   try {
     const tamanho = Number(req.params.tamanho);
 
@@ -144,7 +144,7 @@ export const findCalcadosByTamanho = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Tamanho invalido." });
     }
 
-    const calcados = await findCalcadosByTamanhoRepo(tamanho);
+    const calcados = await buscarCalcadosPorTamanhoRepo(tamanho);
     return res.status(200).json(calcados);
   } catch (error) {
     return res.status(400).json({
@@ -156,7 +156,7 @@ export const findCalcadosByTamanho = async (req: Request, res: Response) => {
 
 // EXTRA: BUSCA POR MARCA
 // Retorna todos os calcados da marca informada.
-export const findCalcadosByMarca = async (req: Request, res: Response) => {
+export const buscarCalcadosPorMarca = async (req: Request, res: Response) => {
   try {
     const { marca } = req.params;
 
@@ -165,7 +165,7 @@ export const findCalcadosByMarca = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Marca invalida." });
     }
 
-    const calcados = await findCalcadosByMarcaRepo(marca);
+    const calcados = await buscarCalcadosPorMarcaRepo(marca);
     return res.status(200).json(calcados);
   } catch (error) {
     return res.status(400).json({
@@ -177,9 +177,9 @@ export const findCalcadosByMarca = async (req: Request, res: Response) => {
 
 // EXTRA: TOTAL DE PARES
 // Retorna um resumo com o total de pares somando todo o estoque.
-export const countTotalPares = async (_req: Request, res: Response) => {
+export const contarTotalPares = async (_req: Request, res: Response) => {
   try {
-    const total = await countTotalParesRepo();
+    const total = await contarTotalParesRepo();
     return res.status(200).json({ total_de_pares: total });
   } catch (error) {
     return res.status(400).json({

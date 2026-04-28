@@ -1,13 +1,13 @@
 import express from "express";
 import { readAllUsers } from "./controllers/UserController";
 import {
-	countTotalPares,
-	createCalcado,
-	deleteCalcado,
-	findCalcadosByMarca,
-	findCalcadosByTamanho,
-	readAllCalcados,
-	updateCalcado,
+	contarTotalPares,
+	criarCalcado,
+	removerCalcado,
+	buscarCalcadosPorMarca,
+	buscarCalcadosPorTamanho,
+	listarCalcados,
+	atualizarCalcado,
 } from "./controllers/CalcadosController";
 
 const routes = express.Router();
@@ -21,18 +21,18 @@ routes.get("/users", readAllUsers);
 // GET: lista itens
 // PATCH: atualiza por id
 // DELETE: remove por id
-routes.post("/calcados", createCalcado);
-routes.get("/calcados", readAllCalcados);
-routes.patch("/calcados/:id", updateCalcado);
-routes.delete("/calcados/:id", deleteCalcado);
+routes.post("/calcados", criarCalcado);
+routes.get("/calcados", listarCalcados);
+routes.patch("/calcados/:id", atualizarCalcado);
+routes.delete("/calcados/:id", removerCalcado);
 
 // Rotas extras do desafio.
 // tamanho: filtra por numero
 // marca: filtra por texto
 // estoque/total: retorna soma da quantidade_em_estoque
-routes.get("/calcados/tamanho/:tamanho", findCalcadosByTamanho);
-routes.get("/calcados/marca/:marca", findCalcadosByMarca);
-routes.get("/calcados/estoque/total", countTotalPares);
+routes.get("/calcados/tamanho/:tamanho", buscarCalcadosPorTamanho);
+routes.get("/calcados/marca/:marca", buscarCalcadosPorMarca);
+routes.get("/calcados/estoque/total", contarTotalPares);
 
 
 export default routes;

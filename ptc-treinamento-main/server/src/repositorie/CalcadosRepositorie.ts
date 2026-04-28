@@ -13,19 +13,19 @@ type CalcadoPayload = {
 
 // CREATE no banco de dados.
 // Recebe os dados prontos e delega a insercao ao Prisma.
-export const createCalcadoRepo = async (data: CalcadoPayload) => {
+export const criarCalcadoRepo = async (data: CalcadoPayload) => {
   return prisma.calcado.create({ data });
 };
 
 // READ de lista.
 // Ordenacao por id asc facilita visualizacao cronologica dos registros.
-export const readAllCalcadosRepo = async () => {
+export const listarCalcadosRepo = async () => {
   return prisma.calcado.findMany({ orderBy: { id: "asc" } });
 };
 
 // UPDATE parcial.
 // O Partial permite enviar somente os campos que mudaram.
-export const updateCalcadoRepo = async (id: number, data: Partial<CalcadoPayload>) => {
+export const atualizarCalcadoRepo = async (id: number, data: Partial<CalcadoPayload>) => {
   return prisma.calcado.update({
     where: { id },
     data,
@@ -34,12 +34,12 @@ export const updateCalcadoRepo = async (id: number, data: Partial<CalcadoPayload
 
 // DELETE por id.
 // Remove o registro de forma definitiva na tabela de calcados.
-export const deleteCalcadoRepo = async (id: number) => {
+export const removerCalcadoRepo = async (id: number) => {
   return prisma.calcado.delete({ where: { id } });
 };
 
 // Filtro por tamanho exato (extra do desafio).
-export const findCalcadosByTamanhoRepo = async (tamanho: number) => {
+export const buscarCalcadosPorTamanhoRepo = async (tamanho: number) => {
   return prisma.calcado.findMany({
     where: { tamanho },
     orderBy: { id: "asc" },
@@ -47,7 +47,7 @@ export const findCalcadosByTamanhoRepo = async (tamanho: number) => {
 };
 
 // Filtro por marca sem diferenciar maiusculas/minusculas (case-insensitive).
-export const findCalcadosByMarcaRepo = async (marca: string) => {
+export const buscarCalcadosPorMarcaRepo = async (marca: string) => {
   return prisma.calcado.findMany({
     where: { marca: { equals: marca, mode: "insensitive" } },
     orderBy: { id: "asc" },
@@ -56,7 +56,7 @@ export const findCalcadosByMarcaRepo = async (marca: string) => {
 
 // Resumo do estoque (extra do desafio).
 // Usa aggregate com _sum para retornar o total de pares no campo quantidade_em_estoque.
-export const countTotalParesRepo = async () => {
+export const contarTotalParesRepo = async () => {
   const result = await prisma.calcado.aggregate({
     _sum: { quantidade_em_estoque: true },
   });
