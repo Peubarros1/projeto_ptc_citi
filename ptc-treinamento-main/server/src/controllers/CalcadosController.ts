@@ -42,7 +42,7 @@ export const criarCalcado = async (req: Request, res: Response) => {
       nome_produto,
       cor,
       marca,
-      tamanho: Number(tamanho),
+      tamanho: Number(tamanho), //força ser um numero mesmo que venha string
       preco: Number(preco),
       quantidade_em_estoque: Number(quantidade_em_estoque),
     });
@@ -85,12 +85,12 @@ export const atualizarCalcado = async (req: Request, res: Response) => {
   try {
     const id = parseId(req.params.id);
 
-    // Se o id nao for numero valido, encerra com erro 400.
+    // Se o id nao for numero valido, encerra com erro 400,ou seja, evita erro no banco caso o id não seja numérico
     if (Number.isNaN(id)) {
       return res.status(400).json({ message: "ID inválido." });
     }
 
-    const payload = req.body as {
+    const payload = req.body as { // payload(dados da requisição) permite que o body seja parcial, ou seja, pode conter apenas os campos a serem atualizados.
       nome_produto?: string;
       cor?: string;
       marca?: string;
@@ -102,7 +102,7 @@ export const atualizarCalcado = async (req: Request, res: Response) => {
     // A regra de atualizacao parcial fica no repositorio via payload parcial.
     const updatedCalcado = await atualizarCalcadoRepo(id, payload);
 
-    return res.status(200).json(updatedCalcado);
+    return res.status(200).json(updatedCalcado);// Retorna o registro atualizado para confirmar as mudanças.
   } catch (error) {
     return res.status(400).json({
       message: "Não foi possível atualizar o calçado.",
