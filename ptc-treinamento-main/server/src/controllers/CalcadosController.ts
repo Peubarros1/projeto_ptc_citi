@@ -62,8 +62,8 @@ export const listarCalcados = async (_req: Request, res: Response) => {
   try {
     const calcados = await listarCalcadosRepo();
 
-    // Mantido para preservar a logica atual do projeto.
-    if (!calcados) {
+    // Se a lista vier vazia, retorna 404 com mensagem.
+    if (calcados.length === 0) {
       return res.status(404).json({
         message: "Ainda não tem calçado cadastrado.",
       });
